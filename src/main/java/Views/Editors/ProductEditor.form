@@ -170,7 +170,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="jtfValue.setColumns(10);&#xa;jtfValue.setValue(0.00);&#xa;jtfValue.setFormatterFactory(getCurrencyFormatter());"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="jtfValue.setColumns(10);&#xa;jtfValue.setValue(0.00);&#xa;jtfValue.setFormatterFactory(TextUtils.getCurrencyFormatter());"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="btnSaveEdit">

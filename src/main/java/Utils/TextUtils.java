@@ -4,6 +4,11 @@
  */
 package Utils;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.NumberFormatter;
+
 /**
  *
  * @author Ellian
@@ -23,5 +28,18 @@ public class TextUtils {
         }
         value = Double.parseDouble(input);
         return value;
+    }
+    
+    public static DefaultFormatterFactory getCurrencyFormatter() {
+        DecimalFormat formato = new DecimalFormat("#,##0.00");
+        formato.setGroupingUsed(true);
+        formato.setRoundingMode(RoundingMode.HALF_UP);
+
+        NumberFormatter formatter = new NumberFormatter(formato);
+        formatter.setValueClass(Double.class);
+        formatter.setAllowsInvalid(false);
+        formatter.setMinimum(0.0);
+
+        return new DefaultFormatterFactory(formatter);
     }
 }

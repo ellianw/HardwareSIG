@@ -23,7 +23,7 @@ import javax.swing.SwingUtilities;
  *
  * @author Ellian
  */
-public class JpnClients extends javax.swing.JPanel {
+public class JpnClients extends javax.swing.JPanel implements PaneInterface {
     private ApplicationContext context;
     private ClientController controller = null;
     private Client editingClient = null;
@@ -320,6 +320,7 @@ public class JpnClients extends javax.swing.JPanel {
         });
     }
     
+    @Override
     public void loadTable() {
         jtbList.setModel(controller.getFilledTableModel());
     }

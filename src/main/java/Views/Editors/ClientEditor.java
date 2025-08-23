@@ -4,33 +4,23 @@
  */
 package Views.Editors;
 
-import Controllers.ClientController;
-import Entities.ApplicationContext;
 import Entities.Client;
-import Utils.ViewUtils;
-import Views.Panes.JpnClients;
-import javax.swing.JOptionPane;
 
 /**
  *
  * @author Ellian
  */
-public class ClientEditor extends javax.swing.JDialog {
-    private ApplicationContext context;
-    private ClientController controller;
-    private Client editingClient;
-    private JpnClients panel;
+//public class ClientEditor extends javax.swing.JDialog implements EditorInterface{
+public class ClientEditor extends AbstractEditor<Client>{
     
     /**
      * Creates new form ClientEditor
+     * @param parent
+     * @param modal
      */
     public ClientEditor(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        context = ApplicationContext.getInstance();
         controller = context.getClientController();
-        if (context.getActivePanel() instanceof JpnClients jpnClients) {
-            panel = jpnClients;
-        }        
         initComponents();
     }
 
@@ -83,7 +73,7 @@ public class ClientEditor extends javax.swing.JDialog {
         btnSaveEdit.setText("Salvar");
         btnSaveEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveEditActionPerformed(evt);
+                saveItemAfterEditingAction(evt);
             }
         });
 
@@ -155,28 +145,13 @@ public class ClientEditor extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnSaveEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveEditActionPerformed
-        if (ViewUtils.missingField(this)) {
-            JOptionPane.showMessageDialog(this, "Preencha todos os campos!", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        setProduct();
-        boolean sucess = controller.saveClient(editingClient);
-
-        if (!sucess) {
-                JOptionPane.showMessageDialog(null, "Erro desconhecido ao salvar fornecedor!", "Erro", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-        JOptionPane.showMessageDialog(this, "Cliente cadastrado!", "Sucesso", JOptionPane.PLAIN_MESSAGE);
-        if (!(panel == null)) {
-            panel.loadTable();
-        }
-        dispose();
-    }//GEN-LAST:event_btnSaveEditActionPerformed
-
     private void btnExitEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitEditActionPerformed
         dispose();
     }//GEN-LAST:event_btnExitEditActionPerformed
+
+    private void saveItemAfterEditingAction(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveItemAfterEditingAction
+        saveItemAfterEditingAction(this);
+    }//GEN-LAST:event_saveItemAfterEditingAction
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExitEdit;
@@ -191,10 +166,20 @@ public class ClientEditor extends javax.swing.JDialog {
     private javax.swing.JTextField jtfName;
     private javax.swing.JFormattedTextField jtfPhone;
     // End of variables declaration//GEN-END:variables
+    
+    @Override
+    public void fillFields(Client client){
+        editingItem = client;
+        jtfCPF.setValue(editingItem.getCPF());
+        jtfName.setText(editingItem.getName());
+        jtfEmail.setText(editingItem.getEmail());
+        jtfPhone.setValue(editingItem.getPhone());
+    }    
 
-    private void setProduct(){
-        if (editingClient == null) {
-            editingClient = new Client(null,
+    @Override
+    public void setItem() {
+        if (editingItem == null) {
+            editingItem = new Client(null,
                     jtfName.getText(),
                     jtfCPF.getValue().toString(),
                     jtfPhone.getText(),
@@ -202,17 +187,9 @@ public class ClientEditor extends javax.swing.JDialog {
             );
             return;
         }
-        editingClient.setName(jtfName.getText());
-        editingClient.setCpf(jtfCPF.getValue().toString());
-        editingClient.setPhone(jtfPhone.getText());
-        editingClient.setEmail(jtfEmail.getText());
+        editingItem.setName(jtfName.getText());
+        editingItem.setCpf(jtfCPF.getValue().toString());
+        editingItem.setPhone(jtfPhone.getText());
+        editingItem.setEmail(jtfEmail.getText());
     }
-    
-    public void fillFields(Client client){
-        editingClient = client;
-        jtfCPF.setValue(editingClient.getCPF());
-        jtfName.setText(editingClient.getName());
-        jtfEmail.setText(editingClient.getEmail());
-        jtfPhone.setValue(editingClient.getPhone());
-    }    
 }

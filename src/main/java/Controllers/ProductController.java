@@ -16,7 +16,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Ellian
  */
-public class ProductController {
+public class ProductController implements ControllerInterface<Product>{
     public final static int ALL = 0;
     public final static int INCLUSIVE = 1;
     public final static int EXCLUSIVE = 2;    
@@ -94,7 +94,8 @@ public class ProductController {
         return tableModel;
     }    
     
-    public boolean saveProduct(Product product) {
+    @Override
+    public boolean saveItem(Product product) {
         try {
             if (product.getId() == null) {
                 dao.insert(product);

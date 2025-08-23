@@ -23,7 +23,7 @@ import javax.swing.SwingUtilities;
  *
  * @author Ellian
  */
-public class JpnSales extends javax.swing.JPanel {
+public class JpnSales extends javax.swing.JPanel implements PaneInterface{
     private ApplicationContext context;
     private SaleController controller;
     /**
@@ -281,6 +281,7 @@ public class JpnSales extends javax.swing.JPanel {
     private javax.swing.JPanel searchPanel;
     // End of variables declaration//GEN-END:variables
 
+    @Override
     public void loadTable() {
         jtbList.setModel(controller.getFilledTableModel());
     }

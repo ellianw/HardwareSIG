@@ -4,38 +4,21 @@
  */
 package Views.Editors;
 
-import Controllers.ProductController;
-import Entities.ApplicationContext;
 import Entities.Product;
 import Utils.TextUtils;
-import Utils.ViewUtils;
-import Views.Panes.JpnProducts;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import javax.swing.JOptionPane;
-import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.NumberFormatter;
 
 /**
  *
  * @author Ellian
  */
-public class ProductEditor extends javax.swing.JDialog {
-    private ApplicationContext context;
-    private ProductController controller;
-    private Product editingProduct;
-    private JpnProducts panel;
+public class ProductEditor extends AbstractEditor<Product> {
     
     /**
      * Creates new form FrmProductEditor
      */
     public ProductEditor(java.awt.Frame parent, boolean modal) {
         super(parent,modal);
-        context = ApplicationContext.getInstance();
         controller = context.getProductController();
-        if (context.getActivePanel() instanceof JpnProducts) {
-            panel = (JpnProducts)context.getActivePanel();
-        }
         initComponents();
     }
 
@@ -162,7 +145,7 @@ public class ProductEditor extends javax.swing.JDialog {
 
         jtfValue.setColumns(10);
         jtfValue.setValue(0.00);
-        jtfValue.setFormatterFactory(getCurrencyFormatter());
+        jtfValue.setFormatterFactory(TextUtils.getCurrencyFormatter());
         btnSaveEdit.putClientProperty( "FlatLaf.style","borderColor:#7FFF00;background:#D0F0C0;borderWidth:2");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -190,23 +173,7 @@ public class ProductEditor extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveEditActionPerformed
-        if (ViewUtils.missingField(jPanel2)) {
-            JOptionPane.showMessageDialog(this, "Preencha todos os campos!", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        setProduct();
-        boolean sucess = controller.saveProduct(editingProduct);
-
-        if (!sucess) {
-                JOptionPane.showMessageDialog(this, "Erro desconhecido ao salvar fornecedor!", "Erro", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-        JOptionPane.showMessageDialog(this, "Produto cadastrado!", "Sucesso", JOptionPane.PLAIN_MESSAGE);
-        editingProduct=null;
-        if (panel != null) {
-            panel.loadTable();
-        }
-        dispose();
+        saveItemAfterEditingAction(this);
     }//GEN-LAST:event_btnSaveEditActionPerformed
 
     private void btnExitEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitEditActionPerformed
@@ -228,41 +195,30 @@ public class ProductEditor extends javax.swing.JDialog {
     private javax.swing.JFormattedTextField jtfStock;
     private javax.swing.JFormattedTextField jtfValue;
     // End of variables declaration//GEN-END:variables
-
-    public DefaultFormatterFactory getCurrencyFormatter() {
-        DecimalFormat formato = new DecimalFormat("#,##0.00");
-        formato.setGroupingUsed(true);
-        formato.setRoundingMode(RoundingMode.HALF_UP);
-
-        NumberFormatter formatter = new NumberFormatter(formato);
-        formatter.setValueClass(Double.class);
-        formatter.setAllowsInvalid(false);
-        formatter.setMinimum(0.0);
-
-        return new DefaultFormatterFactory(formatter);
-    }
-    
-    private void setProduct(){
-        if (editingProduct == null) {
-            editingProduct = new Product(null,
+   
+    @Override
+    public void setItem(){
+        if (editingItem == null) {
+            editingItem = new Product(null,
                     jtfName.getText(),
                     jtfDescription.getText(),
-                    Double.valueOf(TextUtils.parseDouble(jtfValue.getText())),
+                    TextUtils.parseDouble(jtfValue.getText()),
                     Integer.valueOf(jtfStock.getText())
             );
             return;
         }
-        editingProduct.setName(jtfName.getText());
-        editingProduct.setDescription(jtfDescription.getText());
-        editingProduct.setValue(TextUtils.parseDouble(jtfValue.getText()));
-        editingProduct.setStock(Integer.valueOf(jtfStock.getText()));
+        editingItem.setName(jtfName.getText());
+        editingItem.setDescription(jtfDescription.getText());
+        editingItem.setValue(TextUtils.parseDouble(jtfValue.getText()));
+        editingItem.setStock(Integer.valueOf(jtfStock.getText()));
     }
     
+    @Override
     public void fillFields(Product product){
-        editingProduct = product;
-        jtfDescription.setText(editingProduct.getDescription());
-        jtfName.setText(editingProduct.getName());
-        jtfStock.setValue(editingProduct.getStock());
-        jtfValue.setValue(editingProduct.getValue());
+        editingItem = product;
+        jtfDescription.setText(editingItem.getDescription());
+        jtfName.setText(editingItem.getName());
+        jtfStock.setValue(editingItem.getStock());
+        jtfValue.setValue(editingItem.getValue());
     }
 }

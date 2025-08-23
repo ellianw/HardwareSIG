@@ -208,8 +208,8 @@ public class FrmMain extends javax.swing.JFrame {
 
     private void productRegisterMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productRegisterMenuItemActionPerformed
         ProductEditor editor = new ProductEditor(this,true);
-        editor.setVisible(true);
-        editor.setLocationRelativeTo(null);    
+        editor.setLocationRelativeTo(null);   
+        editor.setVisible(true); 
     }//GEN-LAST:event_productRegisterMenuItemActionPerformed
 
     private void newSaleMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newSaleMenuItemActionPerformed

@@ -23,7 +23,7 @@ import javax.swing.SwingUtilities;
  *
  * @author Ellian
  */
-public class JpnProducts extends javax.swing.JPanel {
+public class JpnProducts extends javax.swing.JPanel implements PaneInterface{
     private ApplicationContext context;
     private ProductController controller;
     private Product editingProduct;
@@ -233,8 +233,8 @@ public class JpnProducts extends javax.swing.JPanel {
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
         ProductEditor editor = new ProductEditor(null,true);
-        editor.setVisible(true);
         editor.setLocationRelativeTo(null);    
+        editor.setVisible(true);
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
@@ -322,6 +322,7 @@ public class JpnProducts extends javax.swing.JPanel {
         });
     }
     
+    @Override
     public void loadTable() {
         jtbList.setModel(controller.getFilledTableModel());
     }

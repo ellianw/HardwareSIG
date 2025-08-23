@@ -15,7 +15,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Ellian
  */
-public class ClientController {
+public class ClientController implements ControllerInterface<Client>{
     private ClientDAO dao = null;
     
     public ClientController() {
@@ -57,7 +57,8 @@ public class ClientController {
         return tableModel;
     }
     
-    public boolean saveClient(Client client) {
+    @Override
+    public boolean saveItem(Client client) {
         try {
             if (client.getId() == null) {
                 dao.insert(client);
@@ -66,6 +67,7 @@ public class ClientController {
             }
         } catch (Exception e) {
             System.out.println("SQL error while inserting or updating clients: "+e);
+            e.printStackTrace();
             return false;
         }
         

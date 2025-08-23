@@ -8,9 +8,9 @@ import Controllers.ClientController;
 import Controllers.ProductController;
 import Controllers.SaleController;
 import Controllers.SecurityController;
+import Views.Panes.PaneInterface;
 import java.sql.Connection;
 import javax.swing.JDialog;
-import javax.swing.JPanel;
 
 /**
  *
@@ -21,7 +21,7 @@ public class ApplicationContext {
     
     private Connection connection;
     
-    private JPanel activePanel;
+    private PaneInterface activePanel;
     private JDialog activeEditor;
     private ClientController clientController;
     private ProductController productController;
@@ -49,11 +49,11 @@ public class ApplicationContext {
         this.connection = conn;
     }
 
-    public JPanel getActivePanel() {
+    public PaneInterface getActivePanel() {
         return activePanel;
     }
 
-    public void setActivePanel(JPanel activePanel) {
+    public void setActivePanel(PaneInterface activePanel) {
         this.activePanel = activePanel;
     }
 

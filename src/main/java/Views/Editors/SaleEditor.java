@@ -414,19 +414,6 @@ public class SaleEditor extends javax.swing.JDialog {
     private javax.swing.JTable shoppingCartTable;
     private javax.swing.JTable stockTable;
     // End of variables declaration//GEN-END:variables
-
-    public DefaultFormatterFactory getCurrencyFormatter() {
-        DecimalFormat formato = new DecimalFormat("#,##0.00");
-        formato.setGroupingUsed(true);
-        formato.setRoundingMode(RoundingMode.HALF_UP);
-
-        NumberFormatter formatter = new NumberFormatter(formato);
-        formatter.setValueClass(Double.class);
-        formatter.setAllowsInvalid(false);
-        formatter.setMinimum(0.0);
-
-        return new DefaultFormatterFactory(formatter);
-    }
     
     private void updateCart(){        
         shoppingCartTable.setModel(productController.getShoppingCartFilledTableModel(shoppingCart));
