@@ -110,7 +110,7 @@ public class ProductController implements ControllerInterface<Product>{
         return true;
     }
     
-    public boolean deleteProduct(Integer id) {
+    public boolean deleteItem(Integer id) {
         try {
             dao.delete(id);
         } catch (Exception e) {
@@ -120,7 +120,8 @@ public class ProductController implements ControllerInterface<Product>{
         return true;
     }
     
-    public boolean editProduct(Integer id) {
+    @Override
+    public boolean editItem(Integer id) {
         try {
             Product product = dao.findById(id);
             ProductEditor editor = new ProductEditor(null,true);

@@ -4,10 +4,16 @@
  */
 package Controllers;
 
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Ellian
  */
 public interface ControllerInterface<T> {
     boolean saveItem(T arg);
+    boolean editItem(Integer arg);
+    DefaultTableModel getFilledTableModel();    
+    DefaultTableModel getFilledTableModel(boolean bool, String args);
+    boolean deleteItem(Integer arg);
 }

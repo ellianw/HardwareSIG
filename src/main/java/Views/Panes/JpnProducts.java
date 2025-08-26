@@ -5,38 +5,26 @@
 package Views.Panes;
 
 import Views.Editors.ProductEditor;
-import Controllers.ProductController;
-import Entities.ApplicationContext;
 import Entities.Product;
-import Utils.ViewUtils;
 import Views.FrmMain;
-import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.JComponent;
-import javax.swing.JOptionPane;
-import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 /**
  *
  * @author Ellian
  */
-public class JpnProducts extends javax.swing.JPanel implements PaneInterface{
-    private ApplicationContext context;
-    private ProductController controller;
+public class JpnProducts extends AbstractPanel implements PaneInterface{
     private Product editingProduct;
     
     /**
-     * Creates new form JpnSuppliers
+     * Creates new form JpnProducts
      */
     public JpnProducts() {
-        context = ApplicationContext.getInstance(); 
+        super(); 
         context.setActivePanel(this);
         controller = context.getProductController();
         initComponents();
-        setMappings();
+        setSearchButtonMapping(btnSearch);
     }
    
 
@@ -238,33 +226,11 @@ public class JpnProducts extends javax.swing.JPanel implements PaneInterface{
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        Integer id = ViewUtils.getSelectedListItemId(jtbList);
-        if (id == null) {
-            JOptionPane.showMessageDialog(this, "Selecione um produto!", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        boolean status = controller.editProduct(id);
-        if (!status) {
-            JOptionPane.showMessageDialog(null, "Erro desconhecido ao excluir fornecedor!", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        openEditor(jtbList);
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelActionPerformed
-        Integer id = ViewUtils.getSelectedListItemId(jtbList);
-        if (id == null) {
-            JOptionPane.showMessageDialog(this, "Selecione um produto!", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        if (ViewUtils.excludePane()) {
-            boolean status = controller.deleteProduct(id);
-            if (!status) {
-                JOptionPane.showMessageDialog(this, "Erro desconhecido ao excluir fornecedor!", "Erro", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            loadTable();
-            JOptionPane.showMessageDialog(this, "Produto deletado!", "Sucesso", JOptionPane.PLAIN_MESSAGE);
-        }
+        deleteItemFromTable(jtbList);
     }//GEN-LAST:event_btnDelActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
@@ -300,26 +266,12 @@ public class JpnProducts extends javax.swing.JPanel implements PaneInterface{
         parent.clearFrame(true);
     }
     
-    public Integer getClientId() {
+    public Integer getProductId() {
         return editingProduct == null ? null : editingProduct.getId();
     }
         
     public void setEditingProduct(Product product) {
         editingProduct = product;
-    }
-    
-    private void setMappings() {
-        KeyStroke shortcut = KeyStroke.getKeyStroke("F5");
-        InputMap inputMap = btnSearch.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        ActionMap actionMap = btnSearch.getActionMap();
-
-        inputMap.put(shortcut, "clickButton");
-        actionMap.put("clickButton", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                btnSearch.doClick(); // simula clique
-            }
-        });
     }
     
     @Override

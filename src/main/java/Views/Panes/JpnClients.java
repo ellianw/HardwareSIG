@@ -5,38 +5,26 @@
 package Views.Panes;
 
 import Views.Editors.ClientEditor;
-import Controllers.ClientController;
-import Entities.ApplicationContext;
 import Entities.Client;
-import Utils.ViewUtils;
 import Views.FrmMain;
-import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.JComponent;
-import javax.swing.JOptionPane;
-import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 /**
  *
  * @author Ellian
  */
-public class JpnClients extends javax.swing.JPanel implements PaneInterface {
-    private ApplicationContext context;
-    private ClientController controller = null;
+public class JpnClients extends AbstractPanel implements PaneInterface {
     private Client editingClient = null;
     
     /**
      * Creates new form JpnSuppliers
      */
     public JpnClients() {
-        context = ApplicationContext.getInstance(); 
+        super();
         context.setActivePanel(this);
         controller = context.getClientController();     
         initComponents();
-        setMappings();
+        setSearchButtonMapping(btnSearch);
     }
 
     /**
@@ -238,35 +226,11 @@ public class JpnClients extends javax.swing.JPanel implements PaneInterface {
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        Integer id = ViewUtils.getSelectedListItemId(jtbList);
-        if (id == null) {
-            JOptionPane.showMessageDialog(null, "Selecione um cliente!", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        boolean status = controller.editClient(id);
-        if (!status) {
-            JOptionPane.showMessageDialog(null, "Erro desconhecido ao excluir fornecedor!", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        loadTable();
+        openEditor(jtbList);
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelActionPerformed
-        Integer id = ViewUtils.getSelectedListItemId(jtbList);
-        if (id == null) {
-            JOptionPane.showMessageDialog(null, "Selecione um cliente!", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        if (ViewUtils.excludePane()) {
-            boolean status = controller.deleteClient(id);
-            if (!status) {
-                JOptionPane.showMessageDialog(null, "Erro desconhecido ao excluir fornecedor!", "Erro", JOptionPane.ERROR_MESSAGE);
-                  return;
-            }
-            jtbList.setModel(controller.getFilledTableModel());
-            JOptionPane.showMessageDialog(null, "Cliente deletado!", "Sucesso", JOptionPane.PLAIN_MESSAGE);        
-        }
-
+        deleteItemFromTable(jtbList);
     }//GEN-LAST:event_btnDelActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
@@ -304,20 +268,6 @@ public class JpnClients extends javax.swing.JPanel implements PaneInterface {
     
     public Integer getClientId() {
         return editingClient == null ? null : editingClient.getId();
-    }
-
-    private void setMappings() {
-        KeyStroke shortcut = KeyStroke.getKeyStroke("F5");
-        InputMap inputMap = btnSearch.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        ActionMap actionMap = btnSearch.getActionMap();
-
-        inputMap.put(shortcut, "clickButton");
-        actionMap.put("clickButton", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                btnSearch.doClick(); // simula clique
-            }
-        });
     }
     
     @Override

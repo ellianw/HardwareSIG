@@ -7,11 +7,11 @@ package Views.Editors;
 import Controllers.ControllerInterface;
 import Entities.ApplicationContext;
 import Utils.ViewUtils;
-import Views.Panes.PaneInterface;
 import java.awt.Container;
 import java.awt.Frame;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import Views.Panes.PaneInterface;
 
 /**
  *

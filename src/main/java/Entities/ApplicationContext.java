@@ -8,9 +8,9 @@ import Controllers.ClientController;
 import Controllers.ProductController;
 import Controllers.SaleController;
 import Controllers.SecurityController;
-import Views.Panes.PaneInterface;
 import java.sql.Connection;
 import javax.swing.JDialog;
+import Views.Panes.PaneInterface;
 
 /**
  *

@@ -74,7 +74,7 @@ public class ClientController implements ControllerInterface<Client>{
         return true;
     }
     
-    public boolean deleteClient(Integer id) {
+    public boolean deleteItem(Integer id) {
         try {
             dao.delete(id);
         } catch (Exception e) {
@@ -84,7 +84,8 @@ public class ClientController implements ControllerInterface<Client>{
         return true;
     }
     
-    public boolean editClient(Integer id) {
+    @Override
+    public boolean editItem(Integer id) {
         try {
             Client client = dao.findById(id);
             ClientEditor editor = new ClientEditor(null,true);
