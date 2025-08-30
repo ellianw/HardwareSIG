@@ -4,8 +4,9 @@
  */
 package Views.Components;
 
-import Controllers.SecurityController;
+import Controllers.UserController;
 import Entities.ApplicationContext;
+import Utils.PasswordUtils;
 import java.awt.event.ActionEvent;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
@@ -20,14 +21,14 @@ import javax.swing.KeyStroke;
  * @author Ellian
  */
 public class LoginDialog extends javax.swing.JDialog {
-    private SecurityController controller;
+    private UserController controller;
     /**
      * Creates new form LoginDialog
      */
     public LoginDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        controller = ApplicationContext.getInstance().getSecurityController();
+        controller = ApplicationContext.getInstance().getUserController();
         try {
             setIconImage(ImageIO.read(getClass().getResource("/content/icon.png")));
         } catch (Exception e) {
@@ -105,23 +106,25 @@ public class LoginDialog extends javax.swing.JDialog {
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         String login = loginField.getText();
         String password = new String(passwordField.getPassword());
-        if (!controller.validLogin(login)){
-            JOptionPane.showMessageDialog(this, "O login não existe!", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        
         if (password == null || password.isBlank())  {
             JOptionPane.showMessageDialog(this, "Insira a senha", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
-        }
-        String hashedPassword = SecurityController.generateHash(password);
-        if (!controller.validatePassword(login, hashedPassword)) {
-            JOptionPane.showMessageDialog(this, "Senha incorreta!", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;        
-        }
-        if (!controller.getUser(login, hashedPassword)) {
-            JOptionPane.showMessageDialog(this, "Usuário inativo!", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        }        
+        
+//        if (!controller.validLogin(login)){
+//            JOptionPane.showMessageDialog(this, "O login não existe!", "Aviso", JOptionPane.WARNING_MESSAGE);
+//            return;
+//        }
+//        String hashedPassword = PasswordUtils.generateHash(password);
+//        if (!controller.validatePassword(login, hashedPassword)) {
+//            JOptionPane.showMessageDialog(this, "Senha incorreta!", "Erro", JOptionPane.ERROR_MESSAGE);
+//            return;        
+//        }
+//        if (!controller.getUser(login, hashedPassword)) {
+//            JOptionPane.showMessageDialog(this, "Usuário inativo!", "Erro", JOptionPane.ERROR_MESSAGE);
+//            return;
+//        }
         JOptionPane.showMessageDialog(this, "Login realizado!", "Aviso", JOptionPane.PLAIN_MESSAGE);
         dispose();
     }//GEN-LAST:event_loginButtonActionPerformed

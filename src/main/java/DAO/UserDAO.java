@@ -9,6 +9,7 @@ import Entities.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
@@ -21,48 +22,6 @@ public class UserDAO {
         conn = ApplicationContext.getInstance().getConnection();
     }
     
-    public boolean loginExists(String login) {
-        String sql = "SELECT * FROM users WHERE login = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, login);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return true;
-            }
-        } catch (Exception e) {
-            System.out.println("Error validating login existence: "+e);
-        }
-        return false;
-    }
-    
-    public String getHashByLogin(String login) {
-        String sql = "SELECT password FROM users WHERE login = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, login);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getString("password");
-            }
-        } catch (Exception e) {
-            System.out.println("Error validating login existence: "+e);
-        }
-        return null;
-    }
-    
-    public User findByLogin(String login, String password) {
-        String sql = "SELECT * FROM users WHERE login = ? AND password = ? AND active = true";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, login);
-            stmt.setString(2, password);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return new User(rs.getInt("id"),rs.getString("login"),rs.getString("name"),rs.getInt("privilege"));
-            }
-        } catch (Exception e) {
-            System.out.println("Error validating login existence: "+e);
-        }
-        return null;
-    }
     public boolean updateLoginPassword(int id, String hashPassword) {
         String sql = "UPDATE users SET password = ? WHERE id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -77,4 +36,64 @@ public class UserDAO {
         return true;        
     }
     
+    public boolean saveUser(User user) {
+        String sql = "insert into users values (default,?,?,null,?)";
+        
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            System.out.println(stmt.toString());
+            stmt.setString(1, user.getLogin());
+            stmt.setString(2, user.getName());
+            stmt.setInt(3, user.getPrivilege());
+            stmt.execute();
+        } catch (Exception e ) {
+            System.out.println("Error validating login existence: "+e);
+            return false;            
+        }
+        
+        return true;
+    } 
+    
+    public boolean updateUser(User user) {
+        String sql = "update users set login = ?, name = ?, privilege = ? where login = ?";
+        
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            System.out.println(stmt.toString());
+            stmt.setString(1, user.getLogin());
+            stmt.setString(2, user.getName());
+            stmt.setInt(3, user.getPrivilege());
+            stmt.setInt(4, user.getId());
+            stmt.executeUpdate();
+        } catch (Exception e ) {
+            System.out.println("Error validating login existence: "+e);
+            return false;            
+        }
+        
+        return true;
+    }
+    
+    public User getByLogin(String login) {
+        String sql = "select * from users where login = ? and active = true";
+        
+        User user = null;
+        
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1,login);
+            ResultSet rs = stmt.executeQuery();
+            user = createUser(rs);
+        } catch (Exception e) {
+            System.out.println("Error getting user by login: "+e);
+        }
+        
+        return user;
+    }
+    
+    private User createUser(ResultSet rs) throws SQLException {
+        return new User(
+            rs.getInt("id"),
+            rs.getString("login"),
+            rs.getString("name"),
+            rs.getString("password"),
+            rs.getInt("privilege")               
+        );
+    }
 }

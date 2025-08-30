@@ -4,7 +4,7 @@
  */
 package Views.Components;
 
-import Controllers.SecurityController;
+import Controllers.UserController;
 import Entities.ApplicationContext;
 import Entities.User;
 import Utils.ViewUtils;
@@ -15,14 +15,14 @@ import javax.swing.JOptionPane;
  * @author Ellian
  */
 public class PasswordChangeDialog extends javax.swing.JDialog {
-    SecurityController controller;
+    UserController controller;
     /**
      * Creates new form PasswordChangeDialog
      */
     public PasswordChangeDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        controller = new SecurityController();
+        controller = new UserController();
     }
 
     /**
@@ -105,20 +105,25 @@ public class PasswordChangeDialog extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "Preencha todos os campos!", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        User activeUser = ApplicationContext.getInstance().getActiveUser();
-        if (!controller.validatePassword(activeUser.getLogin(), SecurityController.generateHash(new String(actualPasswordField.getPassword())))) {
-            JOptionPane.showMessageDialog(null, "Senha atual incorreta!", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;            
-        }
+        
         if (!(new String(newPasswordField.getPassword()).equals(new String(confirmPasswordField.getPassword())))) {
             JOptionPane.showMessageDialog(null, "Senhas não batem!", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
+        
+        User activeUser = ApplicationContext.getInstance().getActiveUser();
+        if (controller.validateLogin(activeUser.getLogin(), new String(actualPasswordField.getPassword())) > UserController.SUCCESS) {
+            JOptionPane.showMessageDialog(null, "Senha atual incorreta!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;            
+        }
+        
         boolean status = controller.updateUserPassword(activeUser, new String(newPasswordField.getPassword()));
+        
         if (!status) {
             JOptionPane.showMessageDialog(null, "Erro desconhecido ao atualizar senha!", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
+        
         JOptionPane.showMessageDialog(null, "Senha atualizada!", "Sucesso", JOptionPane.PLAIN_MESSAGE);
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
