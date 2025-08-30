@@ -79,6 +79,7 @@ public class UserDAO {
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1,login);
             ResultSet rs = stmt.executeQuery();
+            rs.next();
             user = createUser(rs);
         } catch (Exception e) {
             System.out.println("Error getting user by login: "+e);

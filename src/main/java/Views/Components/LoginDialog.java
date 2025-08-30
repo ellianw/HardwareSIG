@@ -107,26 +107,26 @@ public class LoginDialog extends javax.swing.JDialog {
         String login = loginField.getText();
         String password = new String(passwordField.getPassword());
         
-        if (password == null || password.isBlank())  {
+        if (password.isBlank())  {
             JOptionPane.showMessageDialog(this, "Insira a senha", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
-        }        
+        }
         
-//        if (!controller.validLogin(login)){
-//            JOptionPane.showMessageDialog(this, "O login não existe!", "Aviso", JOptionPane.WARNING_MESSAGE);
-//            return;
-//        }
-//        String hashedPassword = PasswordUtils.generateHash(password);
-//        if (!controller.validatePassword(login, hashedPassword)) {
-//            JOptionPane.showMessageDialog(this, "Senha incorreta!", "Erro", JOptionPane.ERROR_MESSAGE);
-//            return;        
-//        }
-//        if (!controller.getUser(login, hashedPassword)) {
-//            JOptionPane.showMessageDialog(this, "Usuário inativo!", "Erro", JOptionPane.ERROR_MESSAGE);
-//            return;
-//        }
-        JOptionPane.showMessageDialog(this, "Login realizado!", "Aviso", JOptionPane.PLAIN_MESSAGE);
-        dispose();
+        int status = controller.validateLogin(login, password);
+        switch (status) {
+            case UserController.INVALID_LOGIN -> { 
+                JOptionPane.showMessageDialog(this, "Login inválido!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            }
+                
+            case UserController.INVALID_PASSWORD -> {
+                JOptionPane.showMessageDialog(this, "Senha incorreta!", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+                
+            default -> {
+                JOptionPane.showMessageDialog(this, "Login realizado!", "Aviso", JOptionPane.PLAIN_MESSAGE);
+                dispose();                
+            }
+        }
     }//GEN-LAST:event_loginButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
