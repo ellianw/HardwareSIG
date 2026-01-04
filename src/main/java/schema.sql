@@ -44,7 +44,7 @@ CREATE TABLE users (
     id SERIAL NOT NULL,
     login VARCHAR(40) NOT NULL,
     name VARCHAR(160) NOT NULL,
-    password VARCHAR(1028) NOT NULL,
+    password VARCHAR(1028),
     privilege INTEGER NOT NULL,
     active BOOLEAN NOT NULL
 );

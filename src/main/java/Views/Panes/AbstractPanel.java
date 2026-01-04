@@ -7,15 +7,18 @@ package Views.Panes;
 import Controllers.ControllerInterface;
 import Entities.ApplicationContext;
 import Utils.ViewUtils;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -72,6 +75,10 @@ abstract class AbstractPanel extends javax.swing.JPanel {
                 button.doClick(); // simula clique
             }
         });        
+    }
+    
+    protected Frame getFrame() {
+        return (JFrame) SwingUtilities.getWindowAncestor(this);
     }
     
     abstract void loadTable();

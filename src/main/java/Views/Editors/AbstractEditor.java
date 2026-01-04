@@ -30,7 +30,7 @@ abstract class AbstractEditor<T> extends JDialog{
     }
     
     protected <C extends Container> void saveItemAfterEditingAction(C container) {
-        if (ViewUtils.missingField(container)) {
+        if (missedField(container)) {
             JOptionPane.showMessageDialog(container, "Preencha todos os campos!", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;        
         }
@@ -52,6 +52,10 @@ abstract class AbstractEditor<T> extends JDialog{
         
         dispose();        
     };
+    
+    protected boolean missedField(Container container) {
+        return ViewUtils.missingField(container);
+    }
     
     protected abstract void setItem();
     public abstract void fillFields(T arg);

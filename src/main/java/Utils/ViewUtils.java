@@ -6,8 +6,11 @@ package Utils;
 
 import java.awt.Component;
 import java.awt.Container;
+import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.TableModel;
@@ -18,22 +21,38 @@ import javax.swing.table.TableModel;
  */
 public class ViewUtils {
     public static boolean missingField(Container container) {
+        return missingField(container, true);
+    }
+    
+    public static boolean missingField(Container container, boolean validatePasswordField) {
         for (Component comp : container.getComponents()) {
+            if (comp instanceof JLabel || comp instanceof JButton) continue;            
             if (comp instanceof JFormattedTextField ftf) {
                 if (ftf.getText().trim().isEmpty() || ftf.getValue() == null) {
                     return true;
                 }
+//            } else if (comp instanceof JPasswordField passwordField && validatePasswordField) {
+//                if (passwordField.getPassword().length == 0) {
+//                    return true;
+//                }
+//                break;
             } else if (comp instanceof JTextField tf) {
+                if (tf instanceof JPasswordField passwordField) {
+                    if (validatePasswordField && passwordField.getPassword().length == 0) {
+                        return true;
+                    }
+                    continue;
+                }                
                 if (tf.getText().trim().isEmpty()) {
                     return true;
                 }
-            } else if (comp instanceof Container nested) {
-                if (missingField(nested)) {
+            }  else if (comp instanceof Container nested) {
+                if (missingField(nested,validatePasswordField)) {
                     return true;
                 }
-            }
+            } 
         }
-        return false;
+        return false;    
     }
     
     public static boolean clearFields(Container container) {

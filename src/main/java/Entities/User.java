@@ -12,14 +12,14 @@ public class User {
     private Integer id;
     private String login;
     private String name;
-    private String passwordHash;
+    private String password;
     private int privilege;
 
     public User(Integer id, String login, String name, String passwordHash, int privilege) {
         this.id = id;
         this.login = login;
         this.name = name;
-        this.passwordHash = passwordHash;
+        this.password = passwordHash;
         this.privilege = privilege;
     }
 
@@ -51,11 +51,11 @@ public class User {
         this.privilege = privilege;
     }  
     
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

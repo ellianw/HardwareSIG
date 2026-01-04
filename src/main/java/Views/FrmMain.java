@@ -12,10 +12,10 @@ import Views.Editors.SaleEditor;
 import Views.Editors.ClientEditor;
 import Views.Editors.ProductEditor;
 import Controllers.ReportController;
+import Views.Panes.JpnUsers;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -23,6 +23,11 @@ import javax.swing.JPanel;
  * @author Ellian
  */
 public class FrmMain extends javax.swing.JFrame {
+    public static final int SALE_PANE = 1;
+    public static final int CLIENT_PANE = 2;
+    public static final int PRODUCT_PANE = 3;
+    public static final int USER_PANE = 4;
+    
     private JPanel currentPane = null;
     private ReportController reportController;
     /**
@@ -60,8 +65,8 @@ public class FrmMain extends javax.swing.JFrame {
         listProductMenuItem = new javax.swing.JMenuItem();
         productRegisterMenuItem = new javax.swing.JMenuItem();
         userMenu = new javax.swing.JMenu();
-        changePassword = new javax.swing.JMenuItem();
         manageUsers = new javax.swing.JMenuItem();
+        changePassword = new javax.swing.JMenuItem();
         reportMenu = new javax.swing.JMenu();
         clientReportMenuItem = new javax.swing.JMenuItem();
         productReportMenuItem = new javax.swing.JMenuItem();
@@ -135,14 +140,6 @@ public class FrmMain extends javax.swing.JFrame {
 
         userMenu.setText("Usuários");
 
-        changePassword.setText("Alterar senha");
-        changePassword.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                changePasswordActionPerformed(evt);
-            }
-        });
-        userMenu.add(changePassword);
-
         manageUsers.setText("Gerenciar usuários");
         manageUsers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -150,6 +147,14 @@ public class FrmMain extends javax.swing.JFrame {
             }
         });
         userMenu.add(manageUsers);
+
+        changePassword.setText("Alterar senha");
+        changePassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changePasswordActionPerformed(evt);
+            }
+        });
+        userMenu.add(changePassword);
 
         jMenuBar1.add(userMenu);
 
@@ -203,7 +208,7 @@ public class FrmMain extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void listClientMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listClientMenuItemActionPerformed
-        createClientPane();
+        createPane(CLIENT_PANE);
     }//GEN-LAST:event_listClientMenuItemActionPerformed
 
     private void productRegisterMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productRegisterMenuItemActionPerformed
@@ -218,7 +223,7 @@ public class FrmMain extends javax.swing.JFrame {
     }//GEN-LAST:event_newSaleMenuItemActionPerformed
 
     private void listProductMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listProductMenuItemActionPerformed
-        createProductPane();
+        createPane(PRODUCT_PANE);
     }//GEN-LAST:event_listProductMenuItemActionPerformed
 
     private void clientRegisterMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clientRegisterMenuItemActionPerformed
@@ -228,7 +233,7 @@ public class FrmMain extends javax.swing.JFrame {
     }//GEN-LAST:event_clientRegisterMenuItemActionPerformed
 
     private void listSalesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listSalesMenuItemActionPerformed
-        createSalesPane();
+        createPane(SALE_PANE);
     }//GEN-LAST:event_listSalesMenuItemActionPerformed
 
     private void changePasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePasswordActionPerformed
@@ -250,8 +255,7 @@ public class FrmMain extends javax.swing.JFrame {
     }//GEN-LAST:event_saleReportMenuItemActionPerformed
 
     private void manageUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageUsersActionPerformed
-        JOptionPane.showMessageDialog(this, "Funcionalidade não disponível!", "Aviso", JOptionPane.WARNING_MESSAGE);
-        return;
+        createPane(USER_PANE);
     }//GEN-LAST:event_manageUsersActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -275,32 +279,20 @@ public class FrmMain extends javax.swing.JFrame {
     private javax.swing.JMenuItem saleReportMenuItem;
     private javax.swing.JMenu userMenu;
     // End of variables declaration//GEN-END:variables
-    
-    public void createClientPane(){
+       
+    public void createPane(int pane) {
         clearFrame(false);
         if (currentPane == null) {
-            currentPane = new JpnClients();
+            switch (pane) {
+                case SALE_PANE -> currentPane = new JpnSales();
+                case CLIENT_PANE -> currentPane = new JpnClients();
+                case PRODUCT_PANE -> currentPane = new JpnProducts();
+                case USER_PANE -> currentPane = new JpnUsers();
+                default -> throw new AssertionError();
+            }
             getContentPane().add(currentPane,BorderLayout.CENTER);
-            revalidate();
+            getContentPane().revalidate();            
         }
-    }
-
-    public void createProductPane(){
-        clearFrame(false);
-        if (currentPane == null) {
-            currentPane = new JpnProducts();
-            getContentPane().add(currentPane,BorderLayout.CENTER);
-            getContentPane().revalidate();
-        }
-    }    
-    
-    public void createSalesPane(){
-        clearFrame(false);
-        if (currentPane == null) {
-            currentPane = new JpnSales();
-            getContentPane().add(currentPane,BorderLayout.CENTER);
-            getContentPane().revalidate();
-        }    
     }
     
     public void clearFrame(boolean createBackground){
